@@ -11,7 +11,7 @@ func main() {
 func fnFor(){ /
     for i := 0; i <= 10; i++ {
 		fmt.Printf("Index %d\n", i)
-		
+
 	}
 }*/
 
@@ -39,12 +39,13 @@ func fnWhile()  {
 	}
 }*/
 
-//calling a fucntion that prints digit starts from 0 until it reaches the condition, 
+//calling a fucntion that prints digit starts from 0 until it reaches the condition,
 //then break out of the loop
-func main()  {
+
+func main() {
 	fnWhile()
 }
-func fnWhile()  {
+func fnWhile() {
 	i := 0
 	for true {
 		if i > 7 {
@@ -54,4 +55,3 @@ func fnWhile()  {
 		i++
 	}
 }
-
