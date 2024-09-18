@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
+
 // Write a function that converts a string from camelCase to snake_case.
 
 // If the string is empty, return an empty string.
@@ -9,56 +12,60 @@ import "fmt"
 // For this exercise you need to know that camelCase has two different writing alternatives that will be accepted:
 
 // lowerCamelCase
-// UpperCamelCase
+// UpperCamelCase (PascalCase)
 // Rules for writing in camelCase:
 
 // The word does not end on a capitalized letter (CamelCasE).
 // No two capitalized letters shall follow directly each other (CamelCAse).
 // Numbers or punctuation are not allowed in the word anywhere (camelCase1).
-func CamelToSnakeCase(s string) string{
-	// If the string is empty, return an empty string.
-	// If the string is not camelCase, return the string unchanged.
-	if len(s) == 0 || !CheckCamelCase(s){
+
+// ConvertCamelToSnake converts a camelCase string to snake_case.
+// If the string is empty, it returns an empty string.
+// If the string is not camelCase, it returns the string unchanged.
+func CamelToSnakeCase(s string) string {
+	if s == "" {
+		return ""
+	}
+
+	// Check if the string is in camelCase
+	if !isCamelCase(s) {
 		return s
 	}
 
-	var result string
-	for i := 0; i < len(s); i++{
-		if i > 0 && s[i] >= 'A' && s[i] <= 'Z'{
-			result += "_" + fmt.Sprintf("%c", s[i]+32) // Convert to lowercase directly
-		}else{
-			result += fmt.Sprintf("%c", s[i])
+	result := ""
+	for i := 0; i < len(s); i++ {
+		char := s[i]
+		// Check if the character is uppercase and not the first character
+		if char >= 'A' && char <= 'Z' && i > 0 {
+			result += "_" // Add underscore before uppercase letters
 		}
-		
+		// Convert to lowercase
+		if char >= 'A' && char <= 'Z' {
+			char += 32 // Convert uppercase to lowercase (ASCII)
+		}
+		result += string(char)
 	}
 
 	return result
 }
 
-func CheckCamelCase (s string) bool{
-	if len(s) == 0{
+// isCamelCase checks if a given string is in camelCase format.
+func isCamelCase(s string) bool {
+	if len(s) == 0 || s[0] >= 'A' && s[0] <= 'Z' || s[len(s)-1] >= 'A' && s[len(s)-1] <= 'Z' {
 		return false
 	}
-	for i, char := range s{ 
-		//Check if the first character is uppercase for UpperCamelCase
-		if i == 0 && char >= 'A' && char <= 'Z'{ 
-			continue
+	for i := 1; i < len(s); i++ {
+		if s[i] >= 'A' && s[i] <= 'Z' && s[i-1] >= 'A' && s[i-1] <= 'Z' {
+			return false
 		}
-		if char >= 'A' && char <= 'Z'{
-			if i > 0 && (s[i-1]>= 'A' && s[i-1] <= 'Z'){
-				return false //not camelcase ex. two capitalized letters followed each other (CamelCAse)
-		}
-		if (char < 'a' || char > 'z') && (char < 'A' || char > 'Z'){
-			return false //not camelcase ex. found numbers or punctuation(camelCase1)
-		}
-		if s[len(s)-1]>= 'A' && s[len(s)-1]>= 'Z'{
-			return false //not camelcase ex.word ends on a capitalized letter (CamelCasE)
+		if !(s[i] >= 'a' && s[i] <= 'z') && !(s[i] >= 'A' && s[i] <= 'Z') {
+			return false
 		}
 	}
-	return true	//it is camelcase
+	return true
 }
 
-func main(){
+func main() {
 	fmt.Println(CamelToSnakeCase("HelloWorld"))
 	fmt.Println(CamelToSnakeCase("helloWorld"))
 	fmt.Println(CamelToSnakeCase("camelCase"))
